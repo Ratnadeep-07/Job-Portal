@@ -1,0 +1,38 @@
+package master.servlet;
+
+import java.io.IOException;
+import javax.servlet.*;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.*;
+
+import master.dao.UserDao;
+import master.dto.UserDto;
+
+//@WebServlet("/RegisterServlet")
+public class RegisterServlet extends HttpServlet {
+
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        String name = request.getParameter("name");
+        String email = request.getParameter("email");
+        String password = request.getParameter("password");
+        String mobile = request.getParameter("mobile");
+
+        UserDto user = new UserDto();
+        user.setName(name);
+        user.setEmail(email);
+        user.setPassword(password);
+        user.setMobile(mobile);
+
+        UserDao dao = new UserDao();
+        boolean status = dao.register(user);
+
+        if (status) {
+            response.sendRedirect("Login.jsp");
+        } else {
+        	response.setContentType("text/html");
+            response.getWriter().println("<h3>Registration Failed</h3>");
+        }
+    }
+}
