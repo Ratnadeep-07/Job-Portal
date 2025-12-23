@@ -1,0 +1,25 @@
+package master.servlet;
+
+import javax.servlet.*;
+import javax.servlet.http.*;
+import java.io.IOException;
+import master.dao.JobSeekerDao;
+import master.dto.JobSeekerDto;
+
+public class JobSeekerServlet extends HttpServlet {
+ protected void doPost(HttpServletRequest req, HttpServletResponse res)
+ throws ServletException, IOException {
+
+ JobSeekerDto j = new JobSeekerDto();
+ j.setUsername(req.getParameter("username"));
+ j.setPassword(req.getParameter("password"));
+ j.setName(req.getParameter("name"));
+ j.setPhone(req.getParameter("phone"));
+ j.setEmail(req.getParameter("email"));
+ j.setDomain(req.getParameter("domain"));
+ j.setYexp(req.getParameter("yexp"));
+
+ new JobSeekerDao().addSeeker(j);
+ res.sendRedirect("ClientMenu.jsp");
+ }
+}
