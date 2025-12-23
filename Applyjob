@@ -1,0 +1,19 @@
+package master.servlet;
+
+import javax.servlet.*;
+import javax.servlet.http.*;
+import java.io.IOException;
+import master.dao.ApplyJobDao;
+
+public class ApplyJobServlet extends HttpServlet {
+ protected void doPost(HttpServletRequest req, HttpServletResponse res)
+ throws ServletException, IOException {
+
+ new ApplyJobDao().apply(
+ req.getParameter("username"),
+ req.getParameter("jobid"),
+ req.getParameter("applydt"));
+
+ res.sendRedirect("ClientMenu.jsp");
+ }
+}
