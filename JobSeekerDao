@@ -1,0 +1,22 @@
+package master.dao;
+
+import java.sql.*;
+import master.dto.JobSeekerDto;
+import master.utility.DBConnection;
+
+public class JobSeekerDao {
+ public void addSeeker(JobSeekerDto j) {
+ try {
+ Connection con = DBConnection.getConnection();
+ PreparedStatement ps = con.prepareStatement("INSERT INTO jobseeker VALUES(?,?,?,?,?,?,?)");
+ ps.setString(1,j.getUsername());
+ ps.setString(2,j.getPassword());
+ ps.setString(3,j.getName());
+ ps.setString(4,j.getPhone());
+ ps.setString(5,j.getEmail());
+ ps.setString(6,j.getDomain());
+ ps.setString(7,j.getYexp());
+ ps.executeUpdate();
+ } catch(Exception e){ e.printStackTrace(); }
+ }
+}
