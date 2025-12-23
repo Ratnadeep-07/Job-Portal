@@ -1,0 +1,28 @@
+package master.dao;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import master.dto.JobDto;
+import master.utility.DBConnection;
+
+public class JobDao {
+
+ public void addJob(JobDto j) {
+ try {
+ Connection con = DBConnection.getConnection();
+ PreparedStatement ps = con.prepareStatement("INSERT INTO job VALUES(?,?,?,?,?,?,?)");
+
+ ps.setString(1, j.getJobid());
+ ps.setString(2, j.getJobname());
+ ps.setString(3, j.getJobtype());
+ ps.setString(4, j.getDomain());
+ ps.setString(5, j.getValidupto());
+ ps.setString(6, j.getYrsexp());
+ ps.setString(7, j.getCompanyid());
+
+ ps.executeUpdate();
+ } catch (Exception e) {
+ e.printStackTrace();
+ }
+ }
+}
