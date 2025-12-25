@@ -26,3 +26,4 @@ public class JobDto {
  public String getCompanyid() { return companyid; }
  public void setCompanyid(String companyid) { this.companyid = companyid; }
 }
+
