@@ -1,0 +1,35 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+     <jsp:include page="AdminMenu.jsp"></jsp:include>
+     <%@ page import="master.dao.CompanyDao" %>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Delete Company</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"/>
+</head>
+<body>
+	<form action="<%=request.getContextPath()%>/CompanyServlet" method="post" class="box">
+
+<label>COMPANY ID</label>
+<input type="text" class="form-control" name="cid" required>
+
+<input type="submit" class="btn btn-outline-primary" value="DELETE">
+</form>
+
+<%
+if(request.getMethod().equalsIgnoreCase("POST")){
+    int cid = Integer.parseInt(request.getParameter("cid"));
+    CompanyDao dao = new CompanyDao();
+
+    if(dao.deleteCompany(cid)){
+        out.println("Company Deleted Successfully");
+    } else {
+        out.println("Company Not Found");
+    }
+}
+%>
+
+</body>
+</html>
