@@ -1,41 +1,57 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-    <%@ page import="master.dto.UserDto" %>
+    pageEncoding="UTF-8" session="true" %>
 
 <%
-    /* Session check */
-    UserDto user = (UserDto) session.getAttribute("user");
+    String user = (String) session.getAttribute("user");
+
     if (user == null) {
-        response.sendRedirect("login.jsp");
-        return;
-    }
+        response.sendRedirect("Login.jsp");
+    } else {
 %>
+
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>Client Menu</title>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"/>
 </head>
+
+	<style>
+		  .logout-btn {
+        background-color: #dc3545;
+        color: white;
+        text-decoration: none;
+        padding: 8px 14px;
+        border-radius: 4px;
+        font-weight: bold;
+    }
+
+    .logout-btn:hover {
+        background-color: #bb2d3b;
+    }
+	</style>
+	
 <body>
-	 <div class="title">CLIENT MENU</div>
 
-    <div class="menu-bar">
+<h2>Welcome, <%= user %></h2>
 
-        <div class="menu-item">
-            <a href="JobApply.jsp">JOBAPPLY</a>
-        </div>
+<hr>
 
-        <div class="menu-item">
-            <a href="JobSearch.jsp">SEARCHJOB</a>
-        </div>
+<ul>
+    <li><a href="Job.jsp">Post / View Jobs</a></li>
+    <li><a href="JobSearch.jsp">Search Jobs</a></li>
+    <li><a href="JobApply.jsp">Apply for Job</a></li>
+    <li><a href="JobSeeker.jsp">Job Seeker Profile</a></li>
+    <li><a href="LogoutServlet">Logout</a></li>
+</ul>
 
-        <div class="menu-item">
-            <a href="SearchApplication.jsp">SEARCH APPLICATION</a>
-        </div>
+<a href="LogoutServlet">Logout</a>
 
-        <div class="menu-item empty"></div>
-        <div class="menu-item empty"></div>
-    </div>
+
 </body>
 </html>
+
+<%
+    }
+%>
+
