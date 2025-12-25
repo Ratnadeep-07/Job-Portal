@@ -1,0 +1,78 @@
+package master.servlet;
+
+import java.io.IOException;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import master.dao.CompanyDao;
+import master.dto.CompanyDto;
+
+@WebServlet("/CompanyServlet")
+public class CompanyServlet extends HttpServlet {
+    private static final long serialVersionUID = 1L;
+
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        String action = request.getParameter("action");
+        CompanyDao dao = new CompanyDao();
+
+        // ADD COMPANY
+        if ("add".equals(action)) {
+
+            int cid = Integer.parseInt(request.getParameter("cid"));
+            String name = request.getParameter("name");
+            String email = request.getParameter("email");
+
+            CompanyDto dto = new CompanyDto(cid, name, email);
+
+            boolean status = dao.insertCompany(
+                dto.getCid(),
+                dto.getName(),
+                dto.getEmail()
+            );
+
+            if (status)
+                response.sendRedirect("Company.jsp");
+            else
+                response.sendRedirect("Error.jsp");
+        }
+
+        // UPDATE COMPANY
+        else if ("update".equals(action)) {
+
+            int cid = Integer.parseInt(request.getParameter("cid"));
+            String name = request.getParameter("name");
+            String email = request.getParameter("email");
+
+            CompanyDto dto = new CompanyDto(cid, name, email);
+
+            boolean status = dao.updateCompany(
+                dto.getCid(),
+                dto.getName(),
+                dto.getEmail()
+            );
+
+            if (status)
+                response.sendRedirect("CompanyUpd.jsp");
+            else
+                response.sendRedirect("Error.jsp");
+        }
+
+        // DELETE COMPANY
+        else if ("delete".equals(action)) {
+
+            int cid = Integer.parseInt(request.getParameter("cid"));
+
+            boolean status = dao.deleteCompany(cid);
+
+            if (status)
+                response.sendRedirect("CompanyDel.jsp");
+            else
+                response.sendRedirect("Error.jsp");
+        }
+    }
+}
