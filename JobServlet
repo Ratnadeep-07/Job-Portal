@@ -1,0 +1,58 @@
+package master.servlet;
+
+import java.io.IOException;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet; // Added
+import javax.servlet.http.*;
+import master.dao.JobSeekerDao;
+import master.dto.JobSeekerDto;
+
+// 1. Fixed: Added mapping so the form action can find this servlet
+@WebServlet("/JobSeekerServlet")
+public class JobSeekerServlet extends HttpServlet {
+    private static final long serialVersionUID = 1L;
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse res)
+            throws ServletException, IOException {
+
+        // 2. Fixed: Handle special characters (accented letters, symbols)
+        req.setCharacterEncoding("UTF-8");
+        res.setContentType("text/html; charset=UTF-8");
+
+        try {
+            // 3. Populate DTO from Request
+            JobSeekerDto j = new JobSeekerDto();
+            j.setUsername(req.getParameter("username"));
+            j.setPassword(req.getParameter("password"));
+            j.setName(req.getParameter("name"));
+            j.setPhone(req.getParameter("phone"));
+            j.setEmail(req.getParameter("email"));
+            j.setDomain(req.getParameter("domain"));
+            
+            // 4. Handle numerical parsing for Experience
+            String expStr = req.getParameter("yexp");
+            if (expStr != null && !expStr.trim().isEmpty()) {
+                // Assuming yexp is an int in your DTO. 
+                // If it is a String, keep it as req.getParameter("yexp")
+                j.setYexp(expStr); 
+            }
+
+            // 5. Database Operation
+            JobSeekerDao dao = new JobSeekerDao();
+            boolean isAdded = dao.addSeeker(j);
+
+            // 6. Conditional Redirect based on success
+            if (isAdded) {
+                res.sendRedirect("ClientLogin.jsp?msg=registered");
+            } else {
+                res.sendRedirect("JobSeekerRegister.jsp?msg=fail");
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            // Redirect to an error page or back to register with error message
+            res.sendRedirect("JobSeekerRegister.jsp?msg=error");
+        }
+    }
+}
