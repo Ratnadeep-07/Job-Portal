@@ -4,18 +4,45 @@ import java.sql.*;
 import master.utility.DBConnection;
 
 public class ApplyJobDao {
- public void apply(String user,String job,String date){
- try{
- Connection con = DBConnection.getConnection();
- PreparedStatement ps = con.prepareStatement("INSERT INTO applyjob VALUES(?,?,?)");
- ps.setString(1,user);
- ps.setString(2,job);
- ps.setString(3,date);
- ps.executeUpdate();
- }
- catch(Exception e)
- { 
-	 e.printStackTrace(); 
-  }
- }
+
+    // Improved to return boolean so the Servlet knows if it worked
+    public boolean apply(String user, int jobId, String date) {
+        Connection con = null;
+        PreparedStatement ps = null;
+        boolean status = false;
+
+        try {
+            // 1. Get Connection (Assuming DBConnection has a static method)
+            // If it's not static, use: con = new DBConnection().getConnection();
+            con = DBConnection.getConnection(); 
+
+            // 2. Prepare Statement
+            // It is safer to specify columns: INSERT INTO applyjob(username, jobid, applydate) VALUES(?,?,?)
+            String sql = "INSERT INTO applyjob VALUES(?,?,?)";
+            ps = con.prepareStatement(sql);
+
+            // 3. Bind Parameters (Fixed Types)
+            ps.setString(1, user);
+            ps.setInt(2, jobId);    // FIXED: Use setInt for integer jobId
+            ps.setString(3, date);
+
+            // 4. Execute
+            int result = ps.executeUpdate();
+            if (result > 0) {
+                status = true;
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            // 5. FIXED: Always close resources to prevent memory leaks
+            try {
+                if (ps != null) ps.close();
+                if (con != null) con.close();
+            } catch (SQLException se) {
+                se.printStackTrace();
+            }
+        }
+        return status;
+    }
 }
