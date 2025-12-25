@@ -1,0 +1,38 @@
+body {
+    font-family: Arial;
+}
+
+h2 {
+    text-align: center;
+    color: red;
+}
+
+.box {
+    width: 350px;
+    margin: auto;
+    border: 3px solid red;
+    padding: 20px;
+}
+
+label {
+    color: red;
+    font-weight: bold;
+}
+
+input, select {
+    width: 100%;
+    padding: 8px;
+    margin: 10px 0;
+}
+
+input[type=submit] {
+    border: 2px solid red;
+    background: white;
+    color: red;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+input[type=submit]:hover {
+    background-color: #ffe6e6;
+}
