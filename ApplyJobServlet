@@ -1,0 +1,60 @@
+package master.servlet;
+
+import java.io.IOException;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet; // Required for URL mapping
+import javax.servlet.http.*;
+import master.dao.ApplyJobDao;
+
+// 1. Add the annotation so the server finds this Servlet
+@WebServlet("/ApplyJobServlet")
+public class ApplyJobServlet extends HttpServlet {
+    
+    private static final long serialVersionUID = 1L;
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse res)
+            throws ServletException, IOException {
+
+        // 2. Set encoding to handle special characters
+        req.setCharacterEncoding("UTF-8");
+
+        try {
+            // 3. Validation and Parsing
+            String username = req.getParameter("username");
+            String jobIdStr = req.getParameter("jobid");
+            String applyDt = req.getParameter("applydt");
+
+            // Check for missing data
+            if (username == null || jobIdStr == null || applyDt == null) {
+                res.sendRedirect("ClientMenu.jsp?msg=error_missing_data");
+                return;
+            }
+
+            // Convert jobid to int (Database IDs are usually integers)
+            int jobId = Integer.parseInt(jobIdStr);
+
+            // 4. Call DAO
+            ApplyJobDao dao = new ApplyJobDao();
+            
+            // Assuming your DAO signature is: apply(String username, int jobId, String date)
+            boolean isApplied = dao.apply(username, jobId, applyDt);
+
+            // 5. Intelligent Redirect
+            if (isApplied) {
+                res.sendRedirect("ClientMenu.jsp?msg=success");
+            } else {
+                res.sendRedirect("ClientMenu.jsp?msg=failed");
+            }
+
+        } catch (NumberFormatException e) {
+            // Handles cases where jobid is not a number
+            e.printStackTrace();
+            res.sendRedirect("ClientMenu.jsp?msg=invalid_id");
+        } catch (Exception e) {
+            // Handles DAO or Database connection errors
+            e.printStackTrace();
+            res.sendRedirect("ClientMenu.jsp?msg=server_error");
+        }
+    }
+}
