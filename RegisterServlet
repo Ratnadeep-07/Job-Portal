@@ -1,0 +1,47 @@
+package master.servlet;
+
+import java.io.IOException;
+
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import master.dao.UserDao;
+import master.dto.UserDto;
+
+@WebServlet("/RegisterServlet")
+public class RegisterServlet extends HttpServlet {
+
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws IOException {
+
+        String name = request.getParameter("name");
+        String pass = request.getParameter("password");
+        String email = request.getParameter("email");
+        String mobile = request.getParameter("mobile");
+
+        // BASIC VALIDATION
+        if (name == null || pass == null || email == null || mobile == null ||
+            name.isEmpty() || pass.isEmpty() || email.isEmpty() || mobile.isEmpty()) {
+
+            response.sendRedirect("Error.jsp");
+            return;
+        }
+
+        UserDto udto = new UserDto();
+        udto.setName(name);
+        udto.setPassword(pass);
+        udto.setEmail(email);
+        udto.setMobile(mobile);
+
+        UserDao udao = new UserDao();
+        boolean status = udao.register(udto);
+
+        if (status) {
+            response.sendRedirect("Login.jsp");
+        } else {
+            response.sendRedirect("Error.jsp");
+        }
+    }
+}
