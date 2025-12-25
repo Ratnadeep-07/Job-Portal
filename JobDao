@@ -2,27 +2,52 @@ package master.dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import master.dto.JobDto;
 import master.utility.DBConnection;
 
 public class JobDao {
 
- public void addJob(JobDto j) {
- try {
- Connection con = DBConnection.getConnection();
- PreparedStatement ps = con.prepareStatement("INSERT INTO job VALUES(?,?,?,?,?,?,?)");
+    // Best practice: Specify column names to avoid errors if the table structure changes
+    private final String INSERT_SQL = "INSERT INTO job (jobid, jobname, jobtype, domain, validupto, yrsexp, companyid) VALUES(?,?,?,?,?,?,?)";
 
- ps.setString(1, j.getJobid());
- ps.setString(2, j.getJobname());
- ps.setString(3, j.getJobtype());
- ps.setString(4, j.getDomain());
- ps.setString(5, j.getValidupto());
- ps.setString(6, j.getYrsexp());
- ps.setString(7, j.getCompanyid());
+    public boolean addJob(JobDto j) {
+        Connection con = null;
+        PreparedStatement ps = null;
+        boolean isSuccess = false;
 
- ps.executeUpdate();
- } catch (Exception e) {
- e.printStackTrace();
- }
- }
+        try {
+            // 1. Obtain connection
+            con = DBConnection.getConnection();
+            ps = con.prepareStatement(INSERT_SQL);
+
+            // 2. Map DTO values to SQL parameters
+            // Note: Use ps.setInt() if the database columns are numeric
+            ps.setString(1, j.getJobid());
+            ps.setString(2, j.getJobname());
+            ps.setString(3, j.getJobtype());
+            ps.setString(4, j.getDomain());
+            ps.setString(5, j.getValidupto());
+            ps.setString(6, j.getYrsexp());
+            ps.setString(7, j.getCompanyid());
+
+            // 3. Execute and check result
+            int rowCount = ps.executeUpdate();
+            if (rowCount > 0) {
+                isSuccess = true;
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            // 4. FIXED: Always close resources to prevent memory leaks and DB hanging
+            try {
+                if (ps != null) ps.close();
+                if (con != null) con.close();
+            } catch (SQLException se) {
+                se.printStackTrace();
+            }
+        }
+        return isSuccess; // FIXED: Returns the result to the Servlet
+    }
 }
