@@ -1,0 +1,71 @@
+package master.dao;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import master.utility.DBConnection;
+
+public class CompanyDao {
+
+    // INSERT
+    public boolean insertCompany(int cid, String name, String email) {
+        try {
+            Connection con = DBConnection.getConnection();
+            PreparedStatement ps =
+                con.prepareStatement("INSERT INTO company VALUES(?,?,?)");
+            ps.setInt(1, cid);
+            ps.setString(2, name);
+            ps.setString(3, email);
+            return ps.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    // DELETE
+    public boolean deleteCompany(int cid) {
+        try {
+            Connection con = DBConnection.getConnection();
+            PreparedStatement ps =
+                con.prepareStatement("DELETE FROM company WHERE cid=?");
+            ps.setInt(1, cid);
+            return ps.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    // UPDATE
+    public boolean updateCompany(int cid, String name, String email) {
+        try {
+            Connection con = DBConnection.getConnection();
+            PreparedStatement ps =
+                con.prepareStatement(
+                    "UPDATE company SET name=?, email=? WHERE cid=?"
+                );
+            ps.setString(1, name);
+            ps.setString(2, email);
+            ps.setInt(3, cid);
+            return ps.executeUpdate() > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    // SEARCH
+    public ResultSet searchCompany(int cid) {
+        try {
+            Connection con = DBConnection.getConnection();
+            PreparedStatement ps =
+                con.prepareStatement("SELECT * FROM company WHERE cid=?");
+            ps.setInt(1, cid);
+            return ps.executeQuery();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+}
