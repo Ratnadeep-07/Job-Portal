@@ -1,3 +1,4 @@
+
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -8,17 +9,54 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"/>
 </head>
 <body>
-	<h2 class="title">USER LOGIN</h2>
-	<div style="width:30%;margin:50px auto;">
+		<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f2f2f2;
+    }
+    .container {
+        width: 400px;
+        margin: 80px auto;
+        background: #fff;
+        padding: 25px;
+        border-radius: 6px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    h2 {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+    input {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 12px;
+    }
+    input[type=submit] {
+        background: #28a745;
+        color: white;
+        border: none;
+        cursor: pointer;
+    }
+    input[type=submit]:hover {
+        background: #1e7e34;
+    }
+</style>
 
-    <form action="LoginServlet" method="post" class="form-box">
-    <label>Email</label>
-    <input type="email" class="form-control" name="email" placeholder="ENTER YOUR EMAIL ADDRESS" required>
-    <label>Password</label>
-    <input type="password" class="form-control" name="password" placeholder="ENTER YOUR PASSWORD" required>
-    <input type="submit" class="btn btn-outline-primary" value="Login">
-   
-</form>
+	<div class="container">
+    <h2>Login</h2>
+
+    <form action="LoginServlet" method="post">
+
+        <input type="text" name="name"
+               placeholder="Enter Username" required />
+
+        <input type="password" name="password"
+               placeholder="Enter Password" required />
+
+        <input type="submit" value="Login" />
+
+    </form>
+</div>
 </div>
 
 <%
