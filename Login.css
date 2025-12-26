@@ -1,0 +1,38 @@
+body {
+    font-family: Arial;
+}
+
+.title {
+    text-align: center;
+    color: red;
+}
+
+.form-box {
+    width: 300px;
+    margin: auto;
+    border: 3px solid red;
+    padding: 20px;
+}
+
+label {
+    font-weight: bold;
+    color: red;
+}
+
+input {
+    width: 100%;
+    padding: 8px;
+    margin: 10px 0;
+}
+
+input[type=submit] {
+    background-color: white;
+    color: red;
+    border: 2px solid red;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+input[type=submit]:hover {
+    background-color: #ffe6e6;
+}
